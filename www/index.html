@@ -35,6 +35,11 @@
         
         <!-- Import application elements -->
         <link rel="import" href="elements/elements.html">
+        <script src="bower_components/socket.io-client/socket.io.js"></script>
+        <script>
+            var chatServer = "ws://localhost:3000";
+            //var chatServer = "wss://dku-irc-server.azurewebsites.net";
+        </script>
     </head>
     <body unresolved fullbleed layout vertical>
         <app-header caption="Чат"></app-header>
