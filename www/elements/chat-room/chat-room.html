@@ -107,7 +107,8 @@
                         time: time,
                         message: this.$.message.value
                     }
-                    this.websocket.send(JSON.stringify(data));
+                    //this.websocket.send(JSON.stringify(data));
+                    this.websocket.emit('new message', data);
                     
                     this.$.message.value = '';
                 },
@@ -123,17 +124,25 @@
                 },
                 ready: function () {
                     // this.initializeUsingDom();
-                    var websocket = new WebSocket("ws:localhost:8080");
+                    var socket = io(chatServer);
+                    //var websocket = new WebSocket("ws:dku-irc-server.azurewebsites.net");
                     var self = this;
-                    this.websocket = websocket;
-                    websocket.onopen = function(evt) {
+                    //this.websocket = websocket;
+                    this.websocket = socket;
+                    //websocket.onopen = function(evt) {
+                    //    console.log("connected");
+                    //    websocket.onmessage = function (evt) {
+                    //        console.log(evt.data);
+                    //        var data = JSON.parse(evt.data);
+                    //        self.addMessage(data.login, data.time, data.message);
+                    //    };
+                    //};
+                    socket.on('connect', function (data) {
                         console.log("connected");
-                        websocket.onmessage = function (evt) {
-                            console.log(evt.data);
-                            var data = JSON.parse(evt.data);
-                            self.addMessage(data.login, data.time, data.message);
-                        };
-                    };
+                    });
+                    socket.on('new message', function (data) {
+                        self.addMessage(data.login, data.time, data.message);
+                    });
                 }
             });
         })();
